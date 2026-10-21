@@ -61,10 +61,22 @@ jobs:
           echo "Installing kernel modules..."
           make $BUILD_VAR INSTALL_MOD_PATH="$INSTALL_PATH" modules_install
 
-      - name: Upload Kernel Artifacts
+      - name: Package and Compress Output
+        run: |
+          echo "Packing final kernel and modules into a clean archive..."
+          mkdir -p package_release
+          cp out/arch/x86/boot/bzImage package_release/
+          cp -r out/kernel_modules package_release/modules
+          
+          cd package_release
+          tar -czvf ../blissos_kernel_ksunext.tar.gz *
+          cd ..
+          
+          echo "Archive size:"
+          ls -lh blissos_kernel_ksunext.tar.gz
+
+      - name: Upload Compressed Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: BlissOS-Kernel-And-Modules
-          path: |
-            out/arch/x86/boot/bzImage
-            out/kernel_modules/
+          name: BlissOS-Kernel-And-Modules-Compressed
+          path: blissos_kernel_ksunext.tar.gz

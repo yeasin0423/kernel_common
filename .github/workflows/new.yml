@@ -1,0 +1,67 @@
+name: Manual BlissOS Kernel Build (Guide 1)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout Kernel Source
+        uses: actions/checkout@v4
+        with:
+          repository: yeasin0423/kernel_common
+          ref: umbral-20230329
+          submodules: recursive
+
+      - name: Install Build Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential libncurses-dev bison flex libssl-dev libelf-dev bc git wget curl xz-utils
+
+      - name: Download Clang Toolchain (r487747)
+        run: |
+          echo "Downloading Clang toolchain..."
+          mkdir -p clang
+          # Using a reliable prebuilt archive mirror for Android Clang r596125
+          wget -qO clang.tar.gz "https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/mirror-goog-main-llvm-toolchain-source/clang-r596125.tar.gz"
+          tar -C clang -xf clang.tar.gz
+          rm clang.tar.gz
+
+      - name: Setup KernelSU-Next
+        run: |
+          echo "Setting up KernelSU-Next..."
+          curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/main/kernel/setup.sh" | bash -s v3.4.2
+          
+      - name: Setup nomount
+        run: |
+          echo "Setting up nomountt..."
+          curl https://raw.githubusercontent.com/maxsteeel/nomount/refs/heads/dev/kernel/setup.sh | bash -
+          
+      - name: Compile Kernel and Modules
+        run: |
+          export PATH="$(pwd)/clang/bin:$PATH"
+          export ARCH=x86_64
+          
+          mkdir -p "$(pwd)/out"
+          mkdir -p "$(pwd)/out/kernel_modules"
+          
+          INSTALL_PATH="$(pwd)/out/kernel_modules"
+          BUILD_VAR="-j$(nproc) O=$(pwd)/out ARCH=x86_64 LLVM=1 LLVM_IAS=1"
+          
+          echo "Starting kernel configuration..."
+          make $BUILD_VAR android-x86_64_defconfig
+          
+          echo "Building kernel image (bzImage)..."
+          make $BUILD_VAR
+          
+          echo "Installing kernel modules..."
+          make $BUILD_VAR INSTALL_MOD_PATH="$INSTALL_PATH" modules_install
+
+      - name: Upload Kernel Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: BlissOS-Kernel-And-Modules
+          path: |
+            out/arch/x86/boot/bzImage
+            out/kernel_modules/

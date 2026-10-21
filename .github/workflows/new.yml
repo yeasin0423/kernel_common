@@ -21,8 +21,10 @@ jobs:
 
       - name: Download Clang Toolchain (r487747)
         run: |
-          echo "Cloning Clang toolchain (shallow)..."
-          git clone https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86 --depth 1 clang
+          mkdir -p clang
+          wget -qO clang.tar.gz "https://android.googlesource.com/platform//prebuilts/clang/host/linux-x86/+/788f1e86014660a5230ba4e9f52c39d5b393cd2b/clang-r487747/clang-r487747.tar.gz"
+          tar -C clang -xf clang.tar.gz
+          rm clang.tar.gz
           
       - name: Setup KernelSU-Next
         run: |

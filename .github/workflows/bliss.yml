@@ -25,7 +25,6 @@ jobs:
           ksu-other: true
           ksu-url: https://github.com/KernelSU-Next/KernelSU-Next
           ksu-version: v3.4.2
-          nomount: true
           anykernel3: true
           release: true
           access-token: ${{ secrets.GITHUB_TOKEN }}

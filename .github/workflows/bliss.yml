@@ -17,7 +17,7 @@ jobs:
           kernel-url: https://github.com/yeasin0423/kernel_common
           kernel-branch: umbral-20230329-nksu
           config: android-x86_64_defconfig
-          arch: x86_64
+          arch: x86
           aosp-clang: true
           aosp-gcc: true
           aosp-clang-version: r596125

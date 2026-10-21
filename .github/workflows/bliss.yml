@@ -19,6 +19,7 @@ jobs:
           config: android-x86_64_defconfig
           arch: x86_64
           aosp-clang: true
+          aosp-gcc: true
           aosp-clang-version: r596125
           ksu: true
           ksu-other: true

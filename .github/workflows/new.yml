@@ -32,11 +32,6 @@ jobs:
           echo "Setting up KernelSU-Next..."
           curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash -
           
-      - name: Setup nomount
-        run: |
-          echo "Setting up nomountt..."
-          curl https://raw.githubusercontent.com/maxsteeel/nomount/refs/heads/dev/kernel/setup.sh | bash -
-          
       - name: Compile Kernel and Modules
         run: |
           export PATH="$(pwd)/clang/bin:$PATH"

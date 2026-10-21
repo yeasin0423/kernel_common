@@ -24,14 +24,14 @@ jobs:
           echo "Downloading Clang toolchain..."
           mkdir -p clang
           # Using a reliable prebuilt archive mirror for Android Clang r596125
-          wget -qO clang.tar.gz "https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/mirror-goog-main-llvm-toolchain-source/clang-r596125.tar.gz"
+          wget -qO clang.tar.gz "https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/master/clang-r487747.tar.gz"
           tar -C clang -xf clang.tar.gz
           rm clang.tar.gz
 
       - name: Setup KernelSU-Next
         run: |
           echo "Setting up KernelSU-Next..."
-          curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/main/kernel/setup.sh" | bash -s v3.4.2
+          curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash -
           
       - name: Setup nomount
         run: |

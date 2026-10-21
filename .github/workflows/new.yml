@@ -21,8 +21,9 @@ jobs:
 
       - name: Download Clang Toolchain (r487747)
         run: |
+          echo "Setting up clang"
           mkdir -p clang
-          wget -qO clang.tar.gz "https://android.googlesource.com/platform//prebuilts/clang/host/linux-x86/+/788f1e86014660a5230ba4e9f52c39d5b393cd2b/clang-r487747/clang-r487747.tar.gz"
+          wget -qO clang.tar.gz "https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/android14-release/clang-r487747c.tar.gz"
           tar -C clang -xf clang.tar.gz
           rm clang.tar.gz
           
